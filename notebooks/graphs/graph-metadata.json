@@ -1,0 +1,59 @@
+{
+  "graphs": [
+    {
+      "slug": "dallas-austin",
+      "scan": "mntss/gemma-scope-transcoders",
+      "transcoder_list": [],
+      "prompt_tokens": [
+        "<bos>",
+        "The",
+        " capital",
+        " of",
+        " state",
+        " containing",
+        " Dallas",
+        " is"
+      ],
+      "prompt": "<bos>The capital of state containing Dallas is",
+      "node_threshold": 0.8,
+      "schema_version": 1
+    },
+    {
+      "slug": "gsm8k-james-writes",
+      "scan": "mntss/gemma-scope-transcoders",
+      "transcoder_list": [],
+      "prompt_tokens": [
+        "<bos>",
+        "James",
+        " writes",
+        " a",
+        " ",
+        "3",
+        "-",
+        "page",
+        " letter",
+        " to",
+        " ",
+        "2",
+        " different",
+        " friends",
+        " twice",
+        " a",
+        " week",
+        ".",
+        " How",
+        " many",
+        " pages",
+        " does",
+        " he",
+        " write",
+        " a",
+        " year",
+        "?"
+      ],
+      "prompt": "<bos>James writes a 3-page letter to 2 different friends twice a week. How many pages does he write a year?",
+      "node_threshold": 0.8,
+      "schema_version": 1
+    }
+  ]
+}
