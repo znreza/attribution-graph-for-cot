@@ -1,0 +1,202 @@
+compute_influence function:
+```
+current_influence = logit_weights @ A
+influence = current_influence
+while current_influence.any():
+    current_influence = current_influence @ A
+    influence += current_influence
+```
+
+
+This computes: logit_weights @ (A + A² + A³ + ...)
+Where:
+
+A is the normalized adjacency matrix (each row sums to ~1, representing how influence flows between nodes)
+logit_weights starts with the probability assigned to each output logit token
+Each matrix power A^n traces influence backward n steps through the graph
+
+Node influence measures the total "credit" or "importance" of each node for producing the final output, accounting for:
+
+Direct paths: One-step contributions (A¹)
+Indirect paths: Multi-step contributions (A², A³, etc.)
+All path lengths: Until the influence converges to zero
+
+If you start at the output logits and trace backward through all possible paths in the computation graph, assigning credit proportionally along each path, the node influence tells you how much total credit each node accumulates.
+Output Example: 
+
+Layer 0 features (0.79-0.80 influence): These features capturing aspects of "capital", "Dallas", and "state" are critically important for predicting " Austin"
+Embedding layer (0.06-0.26 influence): The input tokens " of" and " is" have moderate-to-high influence, while others have lower influence
+Layer 1 features (0.79-0.80 influence): Features processing " is" and "state"/"Dallas" continue to be highly influential
+
+The values near 0.8 indicate these nodes account for roughly 80% of the "flow" from inputs to the output prediction, making them the most important computational elements for this specific prediction.
+
+
+What the Normalized Matrix Represents
+After normalization, each row of the adjacency matrix sums to 1. So A[i,j] means:
+"What fraction of node i's incoming influence comes from node j"
+Think of it as: if node i has 100 units of "importance," how much of that came from each source node?
+
+An Example: 
+Let's trace through a simple 3-node graph:
+Input Token "Dallas" → Feature "Texas cities" → Logit " Austin"
+Suppose:
+
+The normalized edge from "Dallas" to "Texas cities" is 0.4 (40% of the feature's input comes from this token)
+The normalized edge from "Texas cities" to " Austin" is 0.6 (60% of the logit's value comes from this feature)
+The logit " Austin" has probability 0.8
+
+Step-by-step credit assignment:
+Initial state:
+
+Logit " Austin": 0.8 credit (its probability)
+Feature "Texas cities": 0 credit (so far)
+Token "Dallas": 0 credit (so far)
+
+After 1 backward step (logit_weights @ A):
+
+Logit: 0.8 (unchanged)
+Feature: 0.8 × 0.6 = 0.48 credit
+
+"The feature contributed 60% of the logit's value, so it gets 60% of the logit's 0.8 credit"
+
+
+Token: 0 (not reached yet)
+
+After 2 backward steps (that result @ A again):
+
+Logit: 0.8
+Feature: 0.48
+Token: 0.48 × 0.4 = 0.192 credit
+
+"The token contributed 40% of the feature's value, so it gets 40% of the feature's 0.48 credit"
+
+
+The token's node influence is 0.192, meaning it accounts for ~19% of why the model predicted " Austin".
+What "Path Proportional Credit" Means
+There can be multiple paths from any node to the output:
+        ┌─→ Feature A ─┐
+Dallas ─┼─→ Feature B ─┼─→ " Austin"
+        └─→ Feature C ─┘
+Each path multiplies the edge weights along it:
+
+Path 1: Dallas → A → Austin contributes edge(Dallas→A) × edge(A→Austin) × 0.8
+Path 2: Dallas → B → Austin contributes edge(Dallas→B) × edge(B→Austin) × 0.8
+Path 3: Dallas → C → Austin contributes edge(Dallas→C) × edge(C→Austin) × 0.8
+
+"Dallas" node influence = sum of all these path contributions
+The Power Series Intuition
+The formula A + A² + A³ + ... automatically computes this:
+
+A¹: All 1-hop paths (direct edges to logits)
+A²: All 2-hop paths (token → feature → logit)
+A³: All 3-hop paths (token → feature → feature → logit)
+etc.
+
+Each term A^n captures the contribution of all n-step paths, weighted by the product of edge weights along each path.
+Why This Matters for Your Example
+When you see:
+Influence: 0.799523 [Token: at_pos_2[▁capital]]
+Feature: 108434900, Type: cross layer transcoder, Pos: 2
+This means: "When we trace backward from ' Austin' through all possible computational paths, this feature processing 'capital' accumulates 79.95% of the total credit for the prediction."
+
+Important: Influence is NOT Additive Across Nodes
+High influence in multiple nodes doesn't mean they're redundant. it often means they're on the same computational paths, where influence flows through them sequentially.
+Example:
+Imagine this computational path:
+Input "Dallas" (0.8 logit weight) 
+    ↓ (edge weight 0.8)
+Layer 0 Feature "Texas city" 
+    ↓ (edge weight 0.9)
+Layer 1 Feature "State capital context"
+    ↓ (edge weight 0.85)
+Output " Austin"
+Working backward with normalized edges:
+Layer 1 Feature influence:
+
+Gets: 0.8 × 0.85 = 0.68 from direct path to logit
+Gets: (potentially more from indirect paths)
+Total: ~0.70+
+
+Layer 0 Feature influence:
+
+Gets: 0.68 × 0.9 = 0.612 from path through Layer 1
+Gets: (potentially more from other paths)
+Total: ~0.65+
+
+Both nodes have high influence (>0.65), but they're on the same path. 
+
+Why There Can be Many >0.7 Nodes
+Looking at your data:
+Layer 0:
+  Feature at pos 2 [capital]: 0.799
+  Feature at pos 6 [Dallas]: 0.798
+  Feature at pos 4 [state]: 0.798
+
+Layer 1:
+  Feature at pos 7 [is]: 0.799
+  Feature at pos 4 [state]: 0.797
+  Feature at pos 6 [Dallas]: 0.797
+These likely represent a computational pipeline:
+Input tokens → Layer 0 features → Layer 1 features → Output
+  (~0.8)          (~0.79-0.80)        (~0.79-0.80)     (0.8)
+The influence values are similar because the same ~80% of credit flows through the entire pipeline. It's not that each contributes 80% independently - rather, they're all carrying forward the same 80% of computational flow.
+The Correct Interpretation
+Node influence tells:
+
+"What fraction of the total computation flows through this node"
+
+NOT:
+
+"What fraction of the output this node is responsible for independently"
+
+If 5 nodes all have 0.8 influence, it doesn't mean you have 4.0 (400%) of explanation - it means those nodes are likely part of overlapping or sequential paths that together account for ~80% of the computation.
+
+
+1. How Layer 0 Feature Gets 0.65 When Main Path is 0.612
+The Layer 0 feature can have multiple outgoing paths:
+                    ┌─→ Layer 1 Feature A (main) ─→ Logit: 0.612
+Layer 0 Feature ─────┼─→ Layer 1 Feature B ───────→ Logit: 0.025
+                    └─→ Layer 1 Feature C ───────→ Logit: 0.013
+                    
+Total influence: 0.612 + 0.025 + 0.013 = 0.65
+Or it could even have a direct connection to later layers (skipping Layer 1):
+Layer 0 Feature ──→ Layer 1 Feature ──→ Logit: 0.612
+      └──────────→ (direct to Layer 2) ──→ Logit: 0.038
+      
+Total: 0.65
+The key: node influence sums across all paths leaving that node, not just the main one.
+2. Does Layer Depth Matter for Influence?
+You're absolutely right that influence doesn't automatically decrease with earlier layers! But let's look at your actual data more carefully:
+Layer 0 features:  0.79-0.80
+Layer E (embeddings): 0.06-0.26  ← Much lower!
+Layer 1 features:  0.79-0.80
+Embeddings have way lower influence! Why?
+The Error Node Effect
+Between embeddings and features, the graph includes error nodes (transcoder reconstruction errors). When we normalize, the adjacency matrix looks like:
+           ┌─→ Layer 0 Feature A (50% of influence)
+Embedding ─┼─→ Layer 0 Feature B (20% of influence)
+           ├─→ Error Node ────────(30% of influence) ← Influence "leaks" here
+           └─→ Other features
+The error nodes absorb influence that doesn't flow through interpretable features. This is why:
+
+Embeddings: ~0.06-0.26 influence (lots leaks to errors)
+Layer 0/1 Features: ~0.79-0.80 influence (less leakage, more efficient paths)
+
+If you had a perfect sequential chain with no errors:
+Embedding → Layer 0 Feature → Layer 1 Feature → Logit
+Then ALL nodes would have identical influence ≈ 0.80, regardless of depth!
+When Does Layer Depth Matter?
+Layer depth affects influence when there's:
+Branching/Merging: Early layers split influence across many downstream nodes
+Error leakage: Imperfect reconstruction loses influence to error nodes
+Redundancy: Multiple parallel paths where some are pruned by normalization
+
+But in a clean sequential pipeline, influence stays high across layers.
+High influence at Layer 0 and Layer 1 doesn't mean they're redundant. It means they're both critical links in the same computational pipeline. The embedding layer has lower influence because:
+
+It's before the error nodes absorb some flow
+Only a fraction successfully flows through to the interpretable feature nodes
+
+Because embeddings weakly explain Layer 0 features (error nodes explain more), influence drops: 0.25 → 0.80 (nature of CLT transcoder) 
+Why Error Nodes Matter
+The transcoder at Layer 0 decomposes the residual stream into.

@@ -1,0 +1,223 @@
+ 1. Graph Analysis & Metrics
+
+  compute_graph_scores(graph) - Quality Metrics (graph.py:250-297)
+
+  What it does: Evaluates how well the attribution graph captures model computation through interpretable features vs error nodes.
+
+  Returns:
+  - Replacement Score: Fraction of token→logit influence flowing through features (not errors)
+  - Completeness Score: Weighted fraction of non-error inputs across all nodes
+
+  Use for TNA-CPT:
+  - Measure whether your unified temporal graphs maintain interpretability quality
+  - Compare completeness scores across CoT steps to see if reasoning becomes more/less interpretable
+  - Track if persistent reasoning circuits have higher replacement scores
+
+  from circuit_tracer.graph import compute_graph_scores
+
+  replacement_score, completeness_score = compute_graph_scores(graph)
+  print(f"Replacement: {replacement_score:.3f}, Completeness: {completeness_score:.3f}")
+  # Higher = better (1.0 = perfect feature-based explanation)
+
+  ---
+  Influence Computation Functions (graph.py:125-154)
+
+  compute_influence(A, logit_weights, max_iter=1000):
+  - Power iteration to compute total influence: A + A² + A³ + ...
+  - Captures multi-hop attribution paths automatically
+
+  compute_node_influence(adjacency_matrix, logit_weights):
+  - Computes each node's total influence on output logits
+  - Already used internally by prune_graph(), but you can call directly
+
+  compute_edge_influence(pruned_matrix, logit_weights):
+  - Computes influence flowing through each edge
+  - Useful for identifying critical pathways in your temporal graphs
+
+  Use for TNA-CPT:
+  - Node tracking algorithm: Use node influence to identify high-persistence features
+  - Temporal path analysis: Trace influence propagation across reasoning steps
+  - Circuit identification: Find edges with consistently high influence across steps
+
+  from circuit_tracer.graph import compute_node_influence, compute_edge_influence
+
+  # Get node influences for ranking
+  node_influences = compute_node_influence(graph.adjacency_matrix, logit_weights)
+
+  # Get edge influences for pathway analysis
+  edge_influences = compute_edge_influence(pruned_matrix, logit_weights)
+
+  ---
+  2. Activation Patching / Intervention 
+
+  model.feature_intervention(inputs, interventions, ...) (replacement_model.py:707-764)
+
+  What it does: Performs activation patching by intervening on specific features and measuring output changes.
+
+  Arguments:
+  - interventions: List of (layer, position, feature_idx, value) tuples
+  - constrained_layers: Range to freeze (for direct effects vs iterative patching)
+  - freeze_attention: Whether to freeze attention patterns
+  - return_activations: Get activation cache for analysis
+
+  Use for TNA-CPT:
+  - RQ3: Patch high-persistence nodes from successful→failing runs
+  - Causal validation: Test if identified circuits are causally necessary
+  - Ablation studies: Zero out features to measure drop in performance
+
+  # Patch a feature to test causal importance
+  interventions = [
+      (layer=10, position=5, feature_idx=902, value=3.5),  # Boost this feature
+      (layer=15, position=7, feature_idx=1234, value=0.0),  # Ablate this one
+  ]
+
+  logits, activations = model.feature_intervention(
+      inputs="Your CoT prompt",
+      interventions=interventions,
+      freeze_attention=True,  # Isolate feature effects
+      constrained_layers=None,  # Allow effects to propagate
+  )
+
+  ---
+  model.feature_intervention_generate(inputs, interventions, ...) (replacement_model.py:785-904)
+
+  What it does: Like feature_intervention, but generates continuations with interventions active.
+
+  Use for TNA-CPT:
+  - Test if patching reasoning circuits improves multi-step generation
+  - Intervene during CoT generation to steer reasoning
+  - Generate with ablated circuits to see failure modes
+
+  # Generate with feature intervention
+  generation, logits, activations = model.feature_intervention_generate(
+      inputs="Solve step-by-step: ",
+      interventions=reasoning_circuit_interventions,
+      max_new_tokens=50,
+  )
+
+  ---
+  3. Advanced Graph Data Access
+
+  Graph Object Properties (graph.py:7-118)
+
+  Already currently used:
+  - graph.adjacency_matrix ✓
+  - graph.input_tokens ✓
+  - graph.logit_tokens ✓
+  - graph.active_features ✓
+
+  Not yet explored:
+  - graph.activation_values: Raw activation magnitudes for each active feature
+    - Use: Compare activation patterns across CoT steps
+    - Track if features amplify/dampen during reasoning
+  - graph.selected_features: Indices of features included in graph (subset of active)
+    - Use: Map between active features and graph nodes for temporal tracking
+  - graph.n_pos: Number of token positions
+    - Use: Programmatically handle variable-length CoT sequences
+
+  Example:
+  # Get activation magnitudes for temporal analysis
+  feature_activations = graph.activation_values  # Tensor of activation strengths
+  layer, pos, feat_idx = graph.active_features[0]  # Get location of each feature
+
+  ---
+  4. Memory Optimization
+
+  offload Parameter in attribute() (attribute.py:100)
+
+  What it does: Offloads model components to CPU or disk during attribution to save GPU memory.
+
+  Options:
+  - offload="cpu": Move parameters to CPU
+  - offload="disk": Save to disk (slowest but most memory-efficient)
+  - offload=None: Keep on GPU (default)
+
+  Use for TNA-CPT:
+  - Essential when generating graphs for long CoT sequences
+  - Allows processing larger models (Gemma-2 9B, Llama-3.2 8B)
+
+  # For memory-constrained environments
+  graph = attribute(
+      prompt=long_cot_text,
+      model=model,
+      offload="cpu",  # or "disk" for extreme cases
+      max_feature_nodes=4096,
+  )
+
+  ---
+  5. Sparse Activation Handling
+
+  model.get_activations(inputs, sparse=True) (replacement_model.py:309-336)
+
+  What it does: Returns sparse tensor representation of feature activations.
+
+  Use for TNA-CPT:
+  - Efficiency: Store activation patterns for multiple CoT steps without memory explosion
+  - Node tracking: Efficiently identify which features are active at each step
+
+  logits, activation_cache = model.get_activations(
+      "Your CoT step text",
+      sparse=True,  # Returns sparse tensors
+      apply_activation_function=True,
+  )
+  # activation_cache[layer] is now a sparse tensor
+
+  ---
+  6. Context Manager for Attribution
+
+  model.setup_attribution(inputs) (replacement_model.py:403-450)
+
+  What it does: Precomputes activations and error vectors for attribution analysis.
+
+  Returns AttributionContext with:
+  - activation_matrix: All transcoder activations
+  - error_vectors: Reconstruction errors per layer/position
+  - token_vectors: Embedding vectors
+  - decoder_vecs, encoder_vecs: Transcoder directions
+
+  Use for TNA-CPT:
+  - Lower-level access to attribution internals
+  - Build custom attribution algorithms beyond attribute()
+  - Access reconstruction error patterns across CoT steps
+
+  ctx = model.setup_attribution(input_ids)
+
+  # Access internal components
+  activations = ctx.activation_matrix  # All feature activations
+  errors = ctx.error_vectors  # Reconstruction errors per layer/position
+
+  ---
+  7. Batch Processing in Attribution
+
+  batch_size and update_interval in attribute() (attribute.py:98, 102)
+
+  batch_size: Number of nodes processed per backward pass
+  - Larger = faster but more memory
+  - Your current: 512
+
+  update_interval: How often to re-rank features by influence
+  - Affects which features get included first
+  - Default: 4 batches
+
+  Use for TNA-CPT:
+  - Tune for optimal performance when generating many graphs
+  - Balance speed vs memory for large-scale CoT analysis
+
+  ---
+  8. Direct Effect Computation
+
+  constrained_layers in feature_intervention() (replacement_model.py:711)
+
+  What it does: When set to range(n_layers), freezes LayerNorm denominators to compute direct effects only (no iterative patching).
+
+  Use for TNA-CPT:
+  - Isolate direct causal pathways without propagation through attention/LayerNorm
+  - Cleaner causal analysis for your intervention experiments
+
+  # Compute direct effects only
+  logits, acts = model.feature_intervention(
+      inputs=prompt,
+      interventions=interventions,
+      constrained_layers=range(model.cfg.n_layers),  # All layers frozen
+  )
+
