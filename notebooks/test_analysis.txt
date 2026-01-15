@@ -1,0 +1,568 @@
+====================================================================================================
+FEATURE CONCEPT ANALYSIS REPORT
+====================================================================================================
+
+SUMMARY
+----------------------------------------------------------------------------------------------------
+Total features analyzed: 23
+Seems relevant: 21 (91.3%)
+Suspicious: 2 (8.7%)
+
+====================================================================================================
+DETAILED ANALYSIS BY TOKEN POSITION
+====================================================================================================
+
+====================================================================================================
+Position 1: Token = 'The'
+====================================================================================================
+
+✅ RELEVANT
+Node ID: 5_13137_1
+Layer 5, Feature 13137
+Activation: 10.125 | Influence: 0.799
+
+Neuronpedia Concept:
+   code blocks, especially comments and class declarations
+
+Top Activating Examples:
+  1. ...**class**_unload(...
+  2. ...**class**>,
+▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁...
+  3. ...**//**▁Revision.▁Current...
+  4. ...**//**▁on▁start▁etc...
+  5. ...**//**▁representation▁about▁the...
+
+Analysis:
+  Top activations contain 'The'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/5-gemmascope-transcoder-16k/13137
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 11_16322_1
+Layer 11, Feature 16322
+Activation: 31.750 | Influence: 0.787
+
+Neuronpedia Concept:
+   code snippets assigning values to variables
+
+Top Activating Examples:
+  1. ...**part**TF.getText...
+  2. ...**=**▁red\]▁node...
+  3. ...**=**j)[[...
+  4. ...**=**▁0x...
+  5. ...**=**▁0x...
+
+Analysis:
+  Polysemantic: capitalized words (token 'The' is capitalized)
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/11-gemmascope-transcoder-16k/16322
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 14_8659_1
+Layer 14, Feature 8659
+Activation: 24.875 | Influence: 0.790
+
+Neuronpedia Concept:
+   the word "The" at the beginning of lines or isolated whitespace
+
+Top Activating Examples:
+  1. ...**▁▁▁▁▁▁▁**speedy▁trial...
+  2. ...**▁▁▁▁▁▁▁**0.0...
+  3. ...**▁▁▁▁▁▁▁**3.8...
+  4. ...**The**▁pancreas▁of▁a...
+  5. ...**The**▁generalized▁master▁equation...
+
+Analysis:
+  Concept mentions 'The'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/14-gemmascope-transcoder-16k/8659
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 17_16267_1
+Layer 17, Feature 16267
+Activation: 49.750 | Influence: 0.782
+
+Neuronpedia Concept:
+   the article 'The'
+
+Top Activating Examples:
+  1. ...**The**▁latest▁in▁the...
+  2. ...**The**▁mission▁was▁rans...
+  3. ...**The**▁Review▁of▁Economics...
+  4. ...**The**▁fire▁control▁unit...
+  5. ...**The**▁following▁is▁Proposition...
+
+Analysis:
+  Concept mentions 'The'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/17-gemmascope-transcoder-16k/16267
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Position 2: Token = ' capital'
+====================================================================================================
+
+✅ RELEVANT
+Node ID: 0_14725_2
+Layer 0, Feature 14725
+Activation: 1.047 | Influence: 0.800
+
+Neuronpedia Concept:
+  code-related terms like project names, libraries, or tags.
+
+Top Activating Examples:
+  1. ...**android**:layout_...
+  2. ...**android**:layout_...
+  3. ...**	**///▁Returns▁AUT...
+  4. ...**▁Scottsdale**▁marks▁the▁kick...
+  5. ...**▁Scottsdale**▁marks▁the▁kick...
+
+Analysis:
+  Polysemantic: activations show place names/capitalized terms relevant to geography
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/0-gemmascope-transcoder-16k/14725
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 16_7171_2
+Layer 16, Feature 7171
+Activation: 45.000 | Influence: 0.800
+
+Neuronpedia Concept:
+  capital
+
+Top Activating Examples:
+  1. ...**▁the**▁Terminal▁Company▁would...
+  2. ...**▁the**▁Terminal▁Company▁would...
+  3. ...**Let**▁j(n...
+  4. ...**'**s▁equipment,...
+  5. ...**1**5,0...
+
+Analysis:
+  Concept mentions ' capital'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/16-gemmascope-transcoder-16k/7171
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Position 3: Token = ' of'
+====================================================================================================
+
+✅ RELEVANT
+Node ID: 6_5053_3
+Layer 6, Feature 5053
+Activation: 4.812 | Influence: 0.798
+
+Neuronpedia Concept:
+  governmental or organizational entities, and the word "institute"
+
+Top Activating Examples:
+  1. ...**▁in**▁19...
+  2. ...**▁in**▁19...
+  3. ...**▁in**▁19...
+  4. ...**▁in**▁19...
+  5. ...**▁in**▁19...
+
+Analysis:
+  Pattern detector for 'capital/place of' constructions
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/6-gemmascope-transcoder-16k/5053
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 15_4494_3
+Layer 15, Feature 4494
+Activation: 31.500 | Influence: 0.794
+
+Neuronpedia Concept:
+  the word "capital" and sometimes letters
+
+Top Activating Examples:
+  1. ...**Let**▁j(n...
+  2. ...**Let**▁j(n...
+  3. ...**9**.HK)...
+  4. ...**▁order**▁to▁generate▁N...
+  5. ...**▁The**▁blue▁keys▁in...
+
+Analysis:
+  Possible contextual pattern detection
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/15-gemmascope-transcoder-16k/4494
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Position 4: Token = ' state'
+====================================================================================================
+
+✅ RELEVANT
+Node ID: 4_9425_4
+Layer 4, Feature 9425
+Activation: 3.828 | Influence: 0.798
+
+Neuronpedia Concept:
+   words related to sports and people's accomplishments
+
+Top Activating Examples:
+  1. ...**▁Baseball**,▁but▁fans...
+  2. ...**▁Baseball**,▁but▁fans...
+  3. ...**▁Baseball**,▁but▁fans...
+  4. ...**▁wording**▁about▁you▁getting...
+  5. ...**▁wording**▁about▁you▁getting...
+
+Analysis:
+  Concept related to ' state':  words related to sports and people's accomplishments
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/4-gemmascope-transcoder-16k/9425
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Position 5: Token = ' containing'
+====================================================================================================
+
+✅ RELEVANT
+Node ID: 3_4017_5
+Layer 3, Feature 4017
+Activation: 2.562 | Influence: 0.800
+
+Neuronpedia Concept:
+  words related to attaching or belonging to something
+
+Top Activating Examples:
+  1. ...**▁conserved**▁arginine▁located▁at...
+  2. ...**▁substantial**▁competent▁evidence▁and...
+  3. ...**▁capacity**▁of
+5...
+  4. ...**▁it**▁requires▁redistribution▁of...
+  5. ...**[**18]....
+
+Analysis:
+  Concept related to ' containing': words related to attaching or belonging to something
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/3-gemmascope-transcoder-16k/4017
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Position 6: Token = ' Dallas'
+====================================================================================================
+
+✅ RELEVANT
+Node ID: 12_10914_6
+Layer 12, Feature 10914
+Activation: 8.125 | Influence: 0.797
+
+Neuronpedia Concept:
+  proper nouns for places.
+
+Top Activating Examples:
+  1. ...**y**▁of▁Taast...
+  2. ...**▁—**▁the▁Mopars...
+  3. ...**0**08▁in...
+  4. ...**▁from**▁Prešov<bos>...
+  5. ...**,**▁primarily▁in▁Fl...
+
+Analysis:
+  Concept related to ' Dallas': proper nouns for places.
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/12-gemmascope-transcoder-16k/10914
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 13_5620_6
+Layer 13, Feature 5620
+Activation: 11.062 | Influence: 0.792
+
+Neuronpedia Concept:
+   proper nouns
+
+Top Activating Examples:
+  1. ...**▁percentage**▁is▁1...
+  2. ...**▁was**▁an▁attempt▁to...
+  3. ...**▁no**▁case▁determine▁the...
+  4. ...**▁negotiations**▁with▁Portugal▁Telecom...
+  5. ...**▁broken**▁for▁some▁time...
+
+Analysis:
+  Concept related to ' Dallas':  proper nouns
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/13-gemmascope-transcoder-16k/5620
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 20_221_6
+Layer 20, Feature 221
+Activation: 24.250 | Influence: 0.731
+
+Neuronpedia Concept:
+   proper nouns related to places
+
+Top Activating Examples:
+  1. ...**:**▁the▁recently▁transplanted...
+  2. ...**▁influenced**▁the▁emergence▁of...
+  3. ...**.**▁They▁were▁granted...
+  4. ...**.**▁They▁were▁granted...
+  5. ...**▁Location**▁shooting▁took▁place...
+
+Analysis:
+  Concept related to ' Dallas':  proper nouns related to places
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/20-gemmascope-transcoder-16k/221
+
+----------------------------------------------------------------------------------------------------
+
+====================================================================================================
+Position 7: Token = ' is'
+====================================================================================================
+
+❓ SUSPICIOUS
+Node ID: 1_4791_7
+Layer 1, Feature 4791
+Activation: 1.945 | Influence: 0.800
+
+Neuronpedia Concept:
+   special formatting used for encoding things such as currency and data types in source code
+
+Top Activating Examples:
+  1. ...**	**"\x0...
+  2. ...**	**"\x0...
+  3. ...**	**"\x0...
+  4. ...**	**"\x0...
+  5. ...**th**b▁=▁...
+
+Analysis:
+  No clear relevance
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/1-gemmascope-transcoder-16k/4791
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 2_437_7
+Layer 2, Feature 437
+Activation: 1.977 | Influence: 0.799
+
+Neuronpedia Concept:
+   auxiliary verbs and related words
+
+Top Activating Examples:
+  1. ...**▁occurred**▁at▁shanghai....
+  2. ...**▁occurred**▁at▁shanghai....
+  3. ...**▁occurred**▁at▁shanghai....
+  4. ...**▁occurred**▁at▁shanghai....
+  5. ...**▁indispensable**.▁The▁s...
+
+Analysis:
+  Concept related to ' is':  auxiliary verbs and related words
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/2-gemmascope-transcoder-16k/437
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 7_1586_7
+Layer 7, Feature 1586
+Activation: 2.359 | Influence: 0.799
+
+Neuronpedia Concept:
+   legal advice related to crimes
+
+Top Activating Examples:
+  1. ...**▁sentence**
+
+This▁is...
+  2. ...**▁sentence**
+
+This▁is...
+  3. ...**▁sentence**
+
+This▁is...
+  4. ...**▁sentence**
+
+This▁is...
+  5. ...**▁sentence**
+
+This▁is...
+
+Analysis:
+  Top activations contain ' is'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/7-gemmascope-transcoder-16k/1586
+
+----------------------------------------------------------------------------------------------------
+
+❓ SUSPICIOUS
+Node ID: 8_7132_7
+Layer 8, Feature 7132
+Activation: 2.547 | Influence: 0.797
+
+Neuronpedia Concept:
+   words and phrases that express preference, equations, and metadata
+
+Top Activating Examples:
+  1. ...**▁with**▁the▁amount▁i...
+  2. ...**▁with**▁the▁amount▁i...
+  3. ...**.**▁Should▁be▁well...
+  4. ...**.**▁Should▁be▁well...
+  5. ...**
+**Let▁x▁=...
+
+Analysis:
+  No clear relevance
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/8-gemmascope-transcoder-16k/7132
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 9_185_7
+Layer 9, Feature 185
+Activation: 2.922 | Influence: 0.796
+
+Neuronpedia Concept:
+  names of specific places, especially those involved in legal proceedings, along with related terms like "county" and "court."
+
+Top Activating Examples:
+  1. ...**▁freed**▁them.▁Stan...
+  2. ...**▁court**:
+
+▁...
+  3. ...**▁born**▁May▁6...
+  4. ...**▁born**▁May▁6...
+  5. ...**3**,▁2...
+
+Analysis:
+  Predictive feature for location/descriptive output
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/9-gemmascope-transcoder-16k/185
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 10_14819_7
+Layer 10, Feature 14819
+Activation: 3.625 | Influence: 0.799
+
+Neuronpedia Concept:
+  scientific and sociological writing that uses certain kinds of helping verbs.
+
+Top Activating Examples:
+  1. ...**One**▁can▁imagine▁the...
+  2. ...**
+
+**The▁mechanisms▁that...
+  3. ...**
+
+**The▁mechanisms▁that...
+  4. ...**▁microbial**▁biomass▁was▁more...
+  5. ...**6**%).▁While▁we...
+
+Analysis:
+  Concept related to ' is': scientific and sociological writing that uses certain kinds of helping verbs.
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/10-gemmascope-transcoder-16k/14819
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 19_13890_7
+Layer 19, Feature 13890
+Activation: 7.969 | Influence: 0.743
+
+Neuronpedia Concept:
+   text about pioneer settlement in the 1800's, including dates and place names
+
+Top Activating Examples:
+  1. ...**▁born**▁May▁6...
+  2. ...**▁born**▁May▁6...
+  3. ...**▁number**▁of▁problems▁in...
+  4. ...**▁number**▁of▁problems▁in...
+  5. ...**▁land**.
+
+In...
+
+Analysis:
+  Predictive feature for location/descriptive output
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/19-gemmascope-transcoder-16k/13890
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 21_15366_7
+Layer 21, Feature 15366
+Activation: 8.875 | Influence: 0.764
+
+Neuronpedia Concept:
+   geographic locations and addresses
+
+Top Activating Examples:
+  1. ...**▁cluster**▁with▁a▁new...
+  2. ...**▁cluster**▁with▁a▁new...
+  3. ...**▁cluster**▁with▁a▁new...
+  4. ...**▁cluster**▁with▁a▁new...
+  5. ...**▁cluster**▁with▁a▁new...
+
+Analysis:
+  Predictive feature for location/descriptive output
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/21-gemmascope-transcoder-16k/15366
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 24_13541_7
+Layer 24, Feature 13541
+Activation: 6.000 | Influence: 0.787
+
+Neuronpedia Concept:
+  a mix of numbers, measurements, specialized vocabulary, and statistics.
+
+Top Activating Examples:
+  1. ...**▁**0;▁...
+  2. ...**▁told**▁my▁family▁it...
+  3. ...**▁by**▁"recent"...
+  4. ...**ch**,▁appellee▁states...
+  5. ...**-**1,4...
+
+Analysis:
+  Concept mentions ' is'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/24-gemmascope-transcoder-16k/13541
+
+----------------------------------------------------------------------------------------------------
+
+✅ RELEVANT
+Node ID: 25_11911_7
+Layer 25, Feature 11911
+Activation: 8.125 | Influence: 0.798
+
+Neuronpedia Concept:
+  the word "is" or "'s" within the context of descriptions.
+
+Top Activating Examples:
+  1. ...**ky**anba▁is...
+  2. ...**alea**▁is▁gearing▁up...
+  3. ...**;**▁@CaFi...
+  4. ...**iley**▁is▁one▁of...
+  5. ...**iley**▁is▁one▁of...
+
+Analysis:
+  Concept mentions ' is'
+
+Verify at: https://www.neuronpedia.org/gemma-2-2b/25-gemmascope-transcoder-16k/11911
+
+----------------------------------------------------------------------------------------------------
